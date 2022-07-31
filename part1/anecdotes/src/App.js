@@ -12,7 +12,7 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
-  const [points, setPoints] = useState([0, 0, 0, 0, 0, 0, 0])
+  const [points, setPoints] = useState(new Array(anecdotes.length).fill(0))
 
   const toggleAnecdotes = () =>{
     const num = Math.floor(Math.random() * anecdotes.length)
