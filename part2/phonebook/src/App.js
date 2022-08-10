@@ -1,5 +1,38 @@
 import { useState } from 'react'
 
+
+// 2.10 创建组件Filter，PersonForm，Persons
+// 创建组件来分离不同功能标签
+const Filter = ({value, onChange}) => (
+  <div>
+    filter shown with<input value={value} onChange={onChange}/>
+  </div>
+)
+
+const PersonForm = (props) => {
+  return(
+    <form onSubmit={props.onSubmit}>
+        <div>
+          name: <input value={props.name} onChange={props.nameChange}/>
+        </div>
+        <div>
+          {/* 2.8 增加了添加电话号码的功能 */}
+          number: <input value={props.number} onChange={props.numberChange}/>
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+  )
+}
+
+const Persons = ({listToShow}) => (
+  listToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)
+)
+
+
+
+
 // 2.6 实现表单与触发器的链接
 // 完成了在输入框输入数据，submit输入的数据和显示数据的功能
 const App = () => {
@@ -42,6 +75,7 @@ const App = () => {
     console.log(event.target.value)
     setNewFilter(event.target.value)
   }
+
   // 2.9 增加filter的功能
   // 实现自动的显示列表变更
   const listToShow = newFilter === '' ? persons : persons.filter( person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
@@ -50,24 +84,13 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with<input value={newFilter} onChange={handleFilterChange}/>
-      </div>
+      <Filter value={newFilter} onChange={handleFilterChange}/>
+  
       <h2>add a new</h2>
-      <form onSubmit={addPhoneNumber}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          {/* 2.8 增加了添加电话号码的功能 */}
-          number: <input value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm onSubmit={addPhoneNumber} name={newName} nameChange={handleNameChange} number={newNumber} numberChange={handleNumberChange}/>
+      
       <h2>Numbers</h2>
-      {listToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      <Persons listToShow={listToShow}/>
     </div>
   )
 }
