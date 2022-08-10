@@ -8,6 +8,7 @@ const App = () => {
   ])
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
   const addPhoneNumber = (event) =>{
     event.preventDefault()
@@ -37,9 +38,22 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
+  const handleFilterChange = (event) => {
+    console.log(event.target.value)
+    setNewFilter(event.target.value)
+  }
+  // 2.9 增加filter的功能
+  // 实现自动的显示列表变更
+  const listToShow = newFilter === '' ? persons : persons.filter( person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
+
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with<input value={newFilter} onChange={handleFilterChange}/>
+      </div>
+      <h2>add a new</h2>
       <form onSubmit={addPhoneNumber}>
         <div>
           name: <input value={newName} onChange={handleNameChange}/>
@@ -53,7 +67,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      {listToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
     </div>
   )
 }
