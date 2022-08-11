@@ -35,10 +35,14 @@ const Persons = ({listToShow}) => (
 
 // 2.6 实现表单与触发器的链接
 // 完成了在输入框输入数据，submit输入的数据和显示数据的功能
-const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-1234567'}
-  ])
+const App = ({data}) => {
+  
+  // 2.11 通过访问json-server的方式获取数据，但是没有使用Effect Hook
+  const [persons, setPersons] = useState(data)
+
+  // 2.11 使用Effect Hook的方式获取JSON数据
+  // ...
+  
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
