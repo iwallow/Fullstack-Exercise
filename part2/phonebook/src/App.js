@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 
 
 // 2.10 创建组件Filter，PersonForm，Persons
@@ -35,14 +36,21 @@ const Persons = ({listToShow}) => (
 
 // 2.6 实现表单与触发器的链接
 // 完成了在输入框输入数据，submit输入的数据和显示数据的功能
-const App = ({data}) => {
+const App = () => {
   
-  // 2.11 通过访问json-server的方式获取数据，但是没有使用Effect Hook
-  const [persons, setPersons] = useState(data)
+  // 2.11 通过访问json-server的方式获取数据 (没有使用Effect Hook)
+  // const [persons, setPersons] = useState(data)
 
   // 2.11 使用Effect Hook的方式获取JSON数据
-  // ...
-  
+  const [persons, setPersons] = useState([])
+ 
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then(response => {
+      const data = response.data
+      setPersons(data)
+    })
+  }, [])
+
   const [newName, setNewName] = useState('')
   const [newNumber,setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
