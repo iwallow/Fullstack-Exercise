@@ -1,6 +1,15 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+// 2.13 将多条的显示提取出来，并实现了按键显示的功能
+// 利用更改过滤的字符内容来实现
+const Country = ({countries, onClick}) => (
+  countries.map(country => (
+      <p key={country.name}>{country.name}
+        <button onClick={() => onClick(country.name)}>show</button>
+      </p>
+  )))
+
 // 2.12 实现国家信息检索功能 
 const App = () => {
   const [countries, setCountries] = useState([])
@@ -18,6 +27,11 @@ const App = () => {
   const changeInputText = (event) => {
     console.log(event.target.value)
     setText(event.target.value)
+  }
+
+  // 2.13 触发器-用来改变text的过滤内容
+  const showCountry = (countryName) => {
+    setText(countryName)
   }
 
   const showCountriesList = () => {
@@ -44,7 +58,7 @@ const App = () => {
     else{
       return(
         <div>
-          {countriesList.map(country => <p key={country.name}>{country.name}</p>)}
+          <Country countries={countriesList} onClick={showCountry}/>
         </div>
       )
     }
