@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState, useEffect } from 'react'
 import phonebookService from './services/phonebook'
 
@@ -60,13 +59,18 @@ const App = () => {
     event.preventDefault()
 
     const newPerson = { name: newName , number: newNumber}
-    const result = persons.filter( person => JSON.stringify(person) === JSON.stringify(newPerson))
-    console.log(result)
+    const sameName = persons.filter( person => person.name === newPerson.name)
     
-    // 2.7 判断添加的元素是否已经在列表当中
-    // 利用JSON.stringify来进行数组之间的判断
-    if(JSON.stringify(result) !== '[]'){
-      alert(`${newPerson.name} is already added to phonebook`)
+    // 2.18 相同姓名的情况下，替换电话号码的功能
+    if(JSON.stringify(sameName) !== '[]'){
+      window.confirm(`replace ??`) &&
+      phonebookService.update(sameName[0].id, newPerson).then(
+        newItem => {
+          setPersons(persons.map(item => item.id !== sameName[0].id? item : newItem))
+          setNewName('')
+          setNewNumber('')
+        }
+      )
     }else{
 
       // 2.15 将添加的元素上传到服务器端（json文件）
@@ -84,11 +88,8 @@ const App = () => {
   //2.17 删除元素的处理函数
   const deletePhoneNumber = (id) =>{
     phonebookService.deleteItem(id)
-    // ！！！ 这里是否应该重新获取全部的列表？
-    // ！！！ 或者有其他更好的方式？？
-    phonebookService.getAll().then(initialData => {
-      setPersons(initialData)
-    })
+    // 通过过滤器来删除本地的显示列表
+    setPersons(persons.filter( person => person.id !== id))
   }
 
   const handleNameChange = (event) =>{
