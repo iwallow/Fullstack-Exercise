@@ -27,8 +27,9 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({listToShow}) => (
-  listToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)
+const Persons = ({listToShow, deletePhoneNumber}) => (
+  // 2.17 添加了删除的按钮，并用处理器deletePhoneNumber方法处理
+  listToShow.map(person => <p key={person.name}>{person.name} {person.number} <button onClick={() => deletePhoneNumber(person.id)}>delete</button></p>)
 )
 
 
@@ -43,6 +44,10 @@ const App = () => {
 
   // 2.11 使用Effect Hook的方式获取JSON数据
   const [persons, setPersons] = useState([])
+
+  const [newName, setNewName] = useState('')
+  const [newNumber,setNewNumber] = useState('')
+  const [newFilter, setNewFilter] = useState('')
  
   useEffect(() => {
     // 2.16 调用与后端通信的方法  
@@ -50,10 +55,6 @@ const App = () => {
       setPersons(initialData)
     })
   }, [])
-
-  const [newName, setNewName] = useState('')
-  const [newNumber,setNewNumber] = useState('')
-  const [newFilter, setNewFilter] = useState('')
 
   const addPhoneNumber = (event) =>{
     event.preventDefault()
@@ -78,6 +79,16 @@ const App = () => {
         }
       )
     }
+  }
+
+  //2.17 删除元素的处理函数
+  const deletePhoneNumber = (id) =>{
+    phonebookService.deleteItem(id)
+    // ！！！ 这里是否应该重新获取全部的列表？
+    // ！！！ 或者有其他更好的方式？？
+    phonebookService.getAll().then(initialData => {
+      setPersons(initialData)
+    })
   }
 
   const handleNameChange = (event) =>{
@@ -109,7 +120,7 @@ const App = () => {
       <PersonForm onSubmit={addPhoneNumber} name={newName} nameChange={handleNameChange} number={newNumber} numberChange={handleNumberChange}/>
       
       <h2>Numbers</h2>
-      <Persons listToShow={listToShow}/>
+      <Persons listToShow={listToShow} deletePhoneNumber={deletePhoneNumber}/>
     </div>
   )
 }

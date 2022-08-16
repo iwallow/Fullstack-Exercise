@@ -7,8 +7,14 @@ const getAll = () => {
     return axios.get(baseUrl).then(response => response.data)
 }
 
-const create = newObject =>{
+const create = newObject => {
     return axios.post(baseUrl, newObject).then(response => response.data)
 }
 
-export default { getAll, create }
+// 2.17 添加了与后端通信的删除方法
+const deleteItem = id => {
+    const url = `${baseUrl}/${id}`
+    return axios.delete(url)
+}
+
+export default { getAll, create, deleteItem }
