@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-
+import phonebookService from './services/phonebook'
 
 // 2.10 创建组件Filter，PersonForm，Persons
 // 创建组件来分离不同功能标签
@@ -45,9 +45,9 @@ const App = () => {
   const [persons, setPersons] = useState([])
  
   useEffect(() => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      const data = response.data
-      setPersons(data)
+    // 2.16 调用与后端通信的方法  
+    phonebookService.getAll().then(initialData => {
+      setPersons(initialData)
     })
   }, [])
 
@@ -67,9 +67,16 @@ const App = () => {
     if(JSON.stringify(result) !== '[]'){
       alert(`${newPerson.name} is already added to phonebook`)
     }else{
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+
+      // 2.15 将添加的元素上传到服务器端（json文件）
+      // 2.16 调用与后端通信的方法  
+      phonebookService.create(newPerson).then(newItem => {
+          console.log(newItem)
+          setPersons(persons.concat(newItem))
+          setNewName('')
+          setNewNumber('')
+        }
+      )
     }
   }
 
