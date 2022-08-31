@@ -1,7 +1,7 @@
 // 2.16 将与后端通信的方法都汇总到一个单独的模块当中
 import axios from 'axios'
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = '/api/persons'
 
 const getAll = () => {
     return axios.get(baseUrl).then(response => response.data)
