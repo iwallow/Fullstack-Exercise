@@ -22,7 +22,12 @@ let persons = [
 ]
 
 const express = require('express')
+
+// 3.7 安装morgan来显示访问时的log
+const morgan = require('morgan')
 const app = express()
+
+app.use(morgan('tiny'))
 
 // 将读取的body内容转换成JSON格式
 app.use(express.json())
