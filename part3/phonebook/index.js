@@ -27,6 +27,7 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 
+app.use(express.static('build'))
 app.use(morgan('tiny'))
 
 // 将读取的body内容转换成JSON格式
@@ -84,7 +85,7 @@ app.post('/api/persons', (request, response) => {
 })
 
 // 3.1 监听端口的设置
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`server is running on ${PORT}`)
 })
